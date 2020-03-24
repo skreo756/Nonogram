@@ -1,0 +1,132 @@
+import 'package:flutter/material.dart';
+import 'game.dart';
+
+void main() => runApp(MyApp());
+
+final Map<int, Color>boxColor=<int ,Color>{
+  2:Colors.blue[50],
+  4:Colors.blue[100],
+  8:Colors.blue[200],
+  16:Colors.blue[300],
+  32:Colors.blue[400],
+  64:Colors.blue[500],
+  128:Colors.blue[600],
+  256:Colors.blue[700],
+  512:Colors.blue[800],
+  1025:Colors.blue[900],
+};
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    final appTitle='2048';
+    return MaterialApp(
+      title: appTitle,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: new Scaffold(
+        body: BoardGridWidget(),
+      ),
+    );
+  }
+}
+
+class BoardGridWidget extends StatelessWidget {
+
+  MediaQueryData _queryData;
+
+
+  Size boardSize() {
+    assert(_queryData != null);
+    Size size = _queryData.size;
+    num width = size.width - _gameMargin.left - _gameMargin.right;
+    return Size(width, width);
+  }
+
+  @override
+
+
+
+
+  Widget build(BuildContext context) {
+    Size boardSize = this.boardSize();
+    double width =
+        (boardSize.width - (3 + 1) * 5.0) /
+            3;
+    List<CellBox> _backgroundBox = List<CellBox>();
+    for (int r = 0; r < 3; ++r) {
+      for (int c = 0; c < 3; ++c) {
+        CellBox box = CellBox(
+          left: c * width + 0.5 * (c + 1),
+          top: r * width + 0.5 * (r + 1),
+          size: width,
+          color: Colors.grey[300],
+        );
+        _backgroundBox.add(box);
+      }
+    }
+    return Positioned(
+        left: 0.0,
+        top: 0.0,
+        child: Container(
+          width: _state.boardSize().width,
+          height: _state.boardSize().height,
+          decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          ),
+          child: Stack(
+            children: _backgroundBox,
+          ),
+        ));
+  }
+}
+
+
+
+
+
+
+
+
+
+
+//class _GameWidgetState extends State<GameWidget> {
+//
+//
+//  State.build() {
+//
+//  }
+//
+//}
+
+
+
+class CellBox extends StatelessWidget {
+  final double left;
+  final double top;
+  final double size;
+  final Color color;
+  final Text text;
+  CellBox({this.left, this.top, this.size, this.color, this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: left,
+      top: top,
+      child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          ),
+          child: Center(
+            child: text,
+          )),
+    );
+  }
+}
